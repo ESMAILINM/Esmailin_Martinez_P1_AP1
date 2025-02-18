@@ -1,0 +1,78 @@
+﻿@page "/Aportes/Edit/{AporteId:int}"
+@inject AportesService aportesService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+
+<PageTitle>Editar</PageTitle>
+
+
+<EditForm Model="aportes" OnValidSubmit="Modificar">
+	<DataAnnotationsValidator />
+
+	<div class="container">
+		<div class="card shadow-lg">
+			<div class="card-header text-center">
+				<h1><strong> Editar Aporte</strong></h1>
+			</div>
+
+			<div class="card-body">
+
+				@* AporteId *@
+				<label for="id" class=" form-label"><strong>AporteId</strong></label>
+				<InputNumber id="id" class=" form-control" @bind-Value="aportes.AporteId" readonly></InputNumber>
+				
+				@* Persona *@
+				<label for="Persona" class=" form-label"><strong>Persona</strong></label>
+				<InputText id="Persona" class=" form-control" @bind-Value="@aportes.Persona"></InputText>
+				<ValidationMessage For="@(() => aportes.Persona)"></ValidationMessage>
+
+				@* observaciones *@
+				<label for="Observaciones" class=" form-label"><strong>Observaciones</strong></label>
+				<InputText id="Concepto" class=" form-control" @bind-Value="@aportes.Observaciones"></InputText>
+				<ValidationMessage For="@(() => aportes.Observaciones)"></ValidationMessage>
+
+				@* Monto *@
+				<label for="Monto" class=" form-label"><strong>Monto</strong></label>
+				<InputNumber id="Monto" class=" form-control" @bind-Value="@aportes.Monto"></InputNumber>
+				<ValidationMessage For="@(()=>aportes.Monto)"></ValidationMessage>
+
+				@* Fecha *@
+
+				<label for="Fecha" class=" form-label"><strong>Fecha</strong></label>
+				<InputDate id="Fecha" class=" form-control" @bind-Value="aportes.Fecha"></InputDate>
+				<ValidationMessage For="@(()=>aportes.Fecha)"></ValidationMessage>
+
+			</div>
+			<div class=" card-footer">
+				<button type="button" class=" btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+				<button type="submit" class=" btn btn-success  bi bi-pencil-square"> Modificar</button>
+			</div>
+		</div>
+	</div>
+</EditForm>
+
+
+@code {
+	[Parameter]
+	public int AporteId { get; set; }
+	public Aportes aportes { get; set; } = new Aportes();
+
+	protected override async Task OnInitializedAsync()
+	{
+		aportes = await aportesService.Buscar(AporteId);
+	}
+
+	public async Task Modificar()
+	{
+		var resultado = await aportesService.Guardar(aportes);
+		aportes = new Aportes();
+		Volver();
+	}
+
+	public void Volver()
+	{
+		navigation.NavigateTo("Aportes/Index");
+	}
+
+}

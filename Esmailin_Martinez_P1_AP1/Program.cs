@@ -19,7 +19,7 @@ var ConSrt = builder.Configuration.GetConnectionString("SqlConStr");
 builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlServer(ConSrt));
 
 //Inyectar del service
-builder.Services.AddScoped<Servicio>();
+builder.Services.AddScoped<AportesService>();
 
 
 

@@ -1,0 +1,74 @@
+﻿@page "/Aportes/Delete/{AporteId:int}"
+@inject AportesService aportesService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle>Eliminar Aportes</PageTitle>
+<EditForm Model="aportes" OnValidSubmit="Eliminar">
+    <DataAnnotationsValidator />
+
+    <div class="container bg-light">
+        <div class="card shadow">
+            <div class="card-header bg-primary">
+                <h3 class="card-title text-center text-white">Eliminar Aporte</h3>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <h4 class="text-danger bg-light"> ¿Est&aacute;s seguro que quieres eliminar este Aporte?</h4>
+
+            <div class="container bg-light mt-4 me-auto">
+                <div class="card shadow">
+                    <h3 class="card-header card-title text-black"><strong>Datos del Aporte</strong></h3>
+
+                    <div class="card-body">
+                        <p class="mb-0"><strong>Aportes ID:</strong> @aportes.AporteId</p>
+                        <div class="mb-1">
+                            <p class="mb-0"><strong>Observaciones:</strong> @aportes.Observaciones</p>
+                        </div>
+                        <div class="mb-1">
+                            <p class="mb-0"><strong>Monto:</strong> @aportes.Monto</p>
+                        </div>
+                        <div class="mb-1">
+                            <p class="mb-0"><strong>Fecha:</strong> @aportes.Fecha</p>
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="Eliminar">Eliminar</button>
+                        <button type="button" class="btn btn-outline-primary bi bi-box-arrow-left" @onclick="Volver">Volver</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int AporteId { get; set; }
+
+    public Aportes aportes { get; set; } = new Aportes();
+
+    protected override async Task OnInitializedAsync()
+    {
+        aportes = await aportesService.Buscar(AporteId);
+
+
+    }
+
+    public async Task Eliminar()
+    {
+        var eliminar = await aportesService.Eliminar(AporteId);
+
+        if (eliminar)
+        {
+            Volver();
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("Aportes/Index");
+    }
+}
