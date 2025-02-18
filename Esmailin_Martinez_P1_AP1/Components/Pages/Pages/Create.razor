@@ -1,5 +1,89 @@
-﻿<h3>Create</h3>
+﻿@page "/Aportes/Create"
+@inject AportesService aportesService
+@inject NavigationManager navigation
+@rendermode InteractiveServer
+
+<PageTitle> Crear </PageTitle>
+<EditForm Model="aportes" OnValidSubmit="Guardar">
+	<DataAnnotationsValidator />
+	<div class=" container bg-lg">
+		<div class=" card shadow">
+			<div class=" card-header text-center bg-primary">
+				<h3 class=" card-title text-white"><strong>Registro de Aportes</strong></h3>
+			</div>
+
+			<div class=" card-body">
+				@* 	id *@
+				<div class=" mb-3">
+					<label class=" form-label"><strong>AporteId</strong></label>
+					<InputNumber id="Aportes" class="form-control" @bind-value="aporte.AporteId" readonly></InputNumber>
+				</div>
+				@* observaciones *@
+				<div class=" mb-3">
+					<label class=" form-label"><strong>Observaciones</strong></label>
+					<InputText id="Observaciones" class="form-control" @bind-value="aporte.Observaciones"></InputText>
+					<ValidationMessage For="@(() => aporte.Observaciones)" />
+				</div>
+				@* persona *@
+				<div class=" mb-3">
+					<label class=" form-label"><strong>Persona</strong></label>
+					<InputText id="Persona" class="form-control" @bind-value="aporte.Persona"></InputText>
+					<ValidationMessage For="@(() => aporte.Persona)" />
+				</div>
+				@* 	monto *@
+				<div class=" mb-3">
+					<label class=" form-label"><strong>Monto</strong></label>
+					<InputNumber id="Monto" class=" form-control" @bind-value="aporte.Monto"></InputNumber>
+					<ValidationMessage For="@(() => aporte.Monto)" />
+				</div>
+
+				@* @fecha@ *@
+				<div class=" me-3">
+					<label class=" form-label"><strong>Fecha</strong></label>
+					<InputDate id="Fecha" class=" form-control" @bind-value="aporte.Fecha"></InputDate>
+					<ValidationMessage For="@(() => aporte.Fecha)" />
+				</div>
+
+				<div class=" card-footer text-center">
+					<button type="button" class=" btn btn-outline-primary" @onclick=" Nuevo"><i class=" bi bi-plus"></i> Nuevo</button>
+					<button type="submit" class=" btn btn-outline-success"><i class=" bi bi-check-circle-fill"></i> Guardar</button>
+					<a href="Aportes/Index" class=" btn btn-outline-danger" @onclick="Volver"><i class=" bi bi-arrow-bar-left"></i> Retroceder</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</EditForm>
 
 @code {
 
+	public List<Aportes> aportes = new List<Aportes>();
+	public Aportes aporte = new Aportes();
+	public string MensajeError = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+
+		aportes = await aportesService.Listar(a => true);
+	}
+
+	public async Task Guardar()
+	{
+		
+    
+		await aportesService.Guardar(aporte);
+		aporte = new Aportes();
+		Volver();
+	}
+	
+
+	public void Volver()
+	{
+		navigation.NavigateTo("Aportes/Index");
+	}
+
+	public void Nuevo()
+	{
+		this.aporte = new Aportes();
+	}
 }
