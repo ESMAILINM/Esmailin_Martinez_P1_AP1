@@ -41,6 +41,7 @@
 						<th>Monto</th>
 						<th>Eliminar</th>
 						<th>Editar</th>
+
 					</tr>
 				</thead>
 				<tbody>
@@ -49,9 +50,8 @@
 						<tr>
 							<td class=" text-center">@aporte.AporteId</td>
 							<td class=" text-center">@aporte.Persona</td>
-							<td class=" text-center">@aporte.Observaciones</td>
 							<td class=" text-center">@aporte.Monto.ToString("N2")</td>
-							<td class=" text-center">@aporte.Fecha</td>
+							
 
 							<td class=" text-center">
 								<a href="/Aportes/Delete/@aporte.AporteId" class=" btn btn-outline-danger bi bi-trash3"></a>
